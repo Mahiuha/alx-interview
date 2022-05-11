@@ -1,41 +1,44 @@
 #!/usr/bin/python3
+""" N queens """
 import sys
 
 
-def nQueens(n):
-    """ The N queens puzzle is the challenge
-            of placing N non-attacking queens on an N×N chessboard
-    """
-    def recursion(queens, cord_dif, cord_sum):
-        """ Recursive function
-        """
-        p = len(queens)
-        if p == n:
-            result.append(queens)
-            return None
-        for q in range(n):
-            if q not in queens and p-q not in cord_dif and p+q not in cord_sum:
-                recursion(queens + [q], cord_dif + [p - q], cord_sum + [p + q])
-    result = []
-    final_result = []
-    recursion([], [], [])
-    for row in result:
-        for i, col in enumerate(row):
-            coord = [i, col]
-            final_result.append(coord)
-        print(final_result)
-        final_result = []
+if len(sys.argv) > 2 or len(sys.argv) < 2:
+    print("Usage: nqueens N")
+    exit(1)
 
-if __name__ == '__main__':
-    if len(sys.argv) != 2:
-        print("Usage: nqueens N")
-        exit(1)
-    try:
-        n = int(sys.argv[1])
-    except:
-        print("N must be a number")
-        exit(1)
-    if int(sys.argv[1]) < 4:
-        print("N must be at least 4")
-        exit(1)
-    nQueens(n)
+if not sys.argv[1].isdigit():
+    print("N must be a number")
+    exit(1)
+
+if int(sys.argv[1]) < 4:
+    print("N must be at least 4")
+    exit(1)
+
+n = int(sys.argv[1])
+
+
+def queens(n, i=0, a=[], b=[], c=[]):
+    """ find possible positions """
+    if i < n:
+        for j in range(n):
+            if j not in a and i + j not in b and i - j not in c:
+                yield from queens(n, i + 1, a + [j], b + [i + j], c + [i - j])
+    else:
+        yield a
+
+
+def solve(n):
+    """ solve """
+    k = []
+    i = 0
+    for solution in queens(n, 0):
+        for s in solution:
+            k.append([i, s])
+            i += 1
+        print(k)
+        k = []
+        i = 0
+
+
+solve(n)
