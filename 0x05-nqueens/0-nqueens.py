@@ -1,46 +1,41 @@
 #!/usr/bin/python3
-""" module docs """
-from sys import argv, exit
+import sys
 
-if __name__ == "__main__":
 
-    if len(argv) != 2:
+def nQueens(n):
+    """ The N queens puzzle is the challenge
+            of placing N non-attacking queens on an N×N chessboard
+    """
+    def recursion(queens, cord_dif, cord_sum):
+        """ Recursive function
+        """
+        p = len(queens)
+        if p == n:
+            result.append(queens)
+            return None
+        for q in range(n):
+            if q not in queens and p-q not in cord_dif and p+q not in cord_sum:
+                recursion(queens + [q], cord_dif + [p - q], cord_sum + [p + q])
+    result = []
+    final_result = []
+    recursion([], [], [])
+    for row in result:
+        for i, col in enumerate(row):
+            coord = [i, col]
+            final_result.append(coord)
+        print(final_result)
+        final_result = []
+
+if __name__ == '__main__':
+    if len(sys.argv) != 2:
         print("Usage: nqueens N")
         exit(1)
-
-    queens = argv[1]
-
     try:
-        queens = int(queens)
-    except ValueError:
+        n = int(sys.argv[1])
+    except:
         print("N must be a number")
         exit(1)
-
-    if queens < 4:
+    if int(sys.argv[1]) < 4:
         print("N must be at least 4")
         exit(1)
-
-    solution = []
-
-    def nqueens(row, queens, solution):
-        """ method docs """
-        if (row == queens):
-            print(solution)
-        else:
-            for col in range(queens):
-                pos = [row, col]
-                if validposition(solution, pos):
-                    solution.append(pos)
-                    nqueens(row + 1, queens, solution)
-                    solution.remove(pos)
-
-    def validposition(solution, position):
-        """ method docs """
-        for queen in solution:
-            if queen[1] == position[1] or \
-                (queen[0] - queen[1]) == (position[0] - position[1]) or \
-                    (queen[0] + queen[1]) == (position[0] + position[1]):
-                return False
-        return True
-
-    nqueens(0, queens, solution)
+    nQueens(n)
