@@ -1,25 +1,23 @@
 #!/usr/bin/python3
-""" MakeChange module"""
+"""Making Change problem
+"""
 
 
 def makeChange(coins, total):
-    """
-    find the minimum number of coins that meets the total number
+    """Returns the fewest number of coins needed to meet a given total
+    Args:
+        coins: array of integers representing the coin values
+        total: the total to find coins for
     """
     if total <= 0:
         return 0
 
-    if not coins or min(coins) > total:
-        return -1
+    array = [float('inf')] * (total + 1)
+    array[0] = 0
 
-    INT_MAX = 1 << 32
-    totalSize = [INT_MAX] * (total + 1)
+    for i in range(1, len(array)):
+        for j in range(len(coins)):
+            if coins[j] <= i:
+                array[i] = min(array[i], array[i - coins[j]] + 1)
 
-    totalSize[0] = 0
-
-    for i in range(1, total + 1):
-        for coin in coins:
-            if coin <= i:
-                totalSize[i] = min((totalSize[i-coin] + 1), totalSize[i])
-
-    return totalSize[total] if totalSize[total] != INT_MAX else -1
+    return array[i] if array[i] != float('inf') else -1
